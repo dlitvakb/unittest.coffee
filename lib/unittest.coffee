@@ -4,7 +4,7 @@ class AssertionError
 
 class Assert
     assertEquals: (message, expected, expectee) ->
-        throw new AssertionError("#{message} - should be #{expected} but was #{expectee}") if expected isnt expectee
+        throw new AssertionError("#{message} - should be '#{expected}' but was '#{expectee}'") if expected isnt expectee
 
     assertTrue: (message, statement) ->
         throw new AssertionError(message) if not statement
@@ -17,6 +17,7 @@ class Assert
 
 class TestCase
     run: () ->
+        amount = 0
         time = new Date()
         test_results = ""
         for method of this
@@ -30,10 +31,13 @@ class TestCase
                         test_results += "F"
                     else
                         console.log(e)
+            amount += 1
 
         time = new Date() - time
+        console.log()
         console.log("Results: #{test_results}")
-        console.log("Tests run in #{time / 1000} seconds")
+        console.log()
+        console.log("Done. #{amount} tests run in #{time / 1000} seconds.")
 
 exports.TestCase = TestCase
 exports.Assert = Assert
