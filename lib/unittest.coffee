@@ -2,7 +2,8 @@ class AssertionError
     constructor: (message) ->
         @message = message
 
-class Assert
+class TestCase
+
     assertEquals: (message, expected, expectee) ->
         throw new AssertionError("#{message} - should be '#{expected}' but was '#{expectee}'") if expected isnt expectee
 
@@ -15,7 +16,6 @@ class Assert
     assertNull: (message, object) ->
         throw new AssertionError(message) if object is null
 
-class TestCase
     run: () ->
         amount = 0
         time = new Date()
