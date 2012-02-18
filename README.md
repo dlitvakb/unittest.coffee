@@ -7,12 +7,12 @@ unittest = require 'unittest'
 
 class FooTest extends unittest.TestCase
     test_foo: () ->
-        new unittest.Assert().assertEquals("should be a foo", "foo", "bar")
+        @assertEquals("should be a foo", "foo", "bar")
         # this will fail with the message
         # "test_foo: should be a foo - expected 'foo' but was 'bar'"
 
     test_bar: () ->
-        new unittest.Assert().assertTrue("should be true", true)
+        @assertTrue("should be true", true)
 
 new FooTest.run()
 ```
