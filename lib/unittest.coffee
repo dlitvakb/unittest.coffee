@@ -42,7 +42,7 @@ class DefaultLogger
   error: (name, error) ->
     @results.push(new AssertionExecutionError(name, error.stack, this))
 
-  dump_results: (time) ->
+  dump_results: (time, assertions) ->
     amount = 0
     for result in @results
       result.log()
@@ -51,13 +51,14 @@ class DefaultLogger
     @log()
     @log("Results: #{(result.value for result in @results).join('')}")
     @log()
-    @log("Done. #{amount} tests run in #{time / 1000} seconds.")
+    @log("Done. #{amount} tests with #{assertions} assertions in #{time / 1000} seconds.")
 
   log: (args...) ->
     console.log(args...)
 
 class TestCase
   constructor: (logger=new DefaultLogger()) ->
+    @assertions = 0
     @logger = logger
 
   class_setup: () ->
@@ -72,17 +73,24 @@ class TestCase
   class_teardown: () ->
     return
 
+  _assertion: (message, condition) ->
+    @assertions += 1
+    throw new AssertionError(message) if not condition
+
   assertEquals: (message, expected, expectee) ->
-    throw new AssertionError("#{message} - should be '#{expected}' but was '#{expectee}'") if expected isnt expectee
+    @_assertion(
+      "#{message} - should be '#{expected}' but was '#{expectee}'",
+      expected is expectee
+    )
 
   assertTrue: (message, statement) ->
-    throw new AssertionError(message) if not statement
+    @_assertion(message, statement)
 
   assertFalse: (message, statement) ->
-    throw new AssertionError(message) if statement
+    @_assertion(message, not statement)
 
   assertNull: (message, object) ->
-    throw new AssertionError(message) if object is null
+    @_assertion(message, object isnt null)
 
   _is_test: (method_name) ->
     return /test_\w+/.test method_name
@@ -112,7 +120,8 @@ class TestCase
 
     @class_teardown()
 
-    @logger.dump_results(new Date() - time)
+    @logger.dump_results(new Date() - time, @assertions)
+    @assertions = 0
 
 class TestSuite
   constructor: (logger=new DefaultLogger()) ->
