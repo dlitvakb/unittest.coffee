@@ -59,7 +59,7 @@ class DefaultLogger
 class TestCase
   constructor: (logger=new DefaultLogger()) ->
     @__assertions = 0
-    @logger = logger
+    @__logger = logger
 
   class_setup: () ->
     return
@@ -109,29 +109,29 @@ class TestCase
       try
         this[method]()
 
-        @logger.success()
+        @__logger.success()
       catch e
         if e instanceof AssertionError
-          @logger.failure(method, e)
+          @__logger.failure(method, e)
         else
-          @logger.error(method, e)
+          @__logger.error(method, e)
 
       @teardown()
 
     @class_teardown()
 
-    @logger.dump_results(new Date() - time, @__assertions)
+    @__logger.dump_results(new Date() - time, @__assertions)
     @assertions = 0
 
 class TestSuite
   constructor: (logger=new DefaultLogger()) ->
-    @logger = logger
+    @__logger = logger
 
   _is_suite: (attr) ->
     return /suite_\w+/.test attr
 
   _run_suite: (suite_name) ->
-    @logger.log("Running #{this[suite_name].name} suite")
+    @__logger.log("Running #{this[suite_name].name} suite")
     new this[suite_name]().run()
 
   run: () ->
@@ -141,7 +141,7 @@ class TestSuite
       try
         @_run_suite attr
       catch e
-        @logger.log(e)
+        @__logger.log(e)
         throw e
 
 exports.TestSuite = TestSuite

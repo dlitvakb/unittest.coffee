@@ -18,8 +18,8 @@ class TestCaseTest extends unittest.TestCase
   test_more_than_one_unittest: () ->
     test = new TestWithMoreThanOneTest(new NonConsoleLogger())
     test.run()
-    @assertEquals('should have passed', '.', test.logger.results[0].value)
-    @assertEquals('should have failed', 'F', test.logger.results[1].value)
-    @assertEquals('should have errors', 'E', test.logger.results[2].value)
+    @assertEquals('should have passed', '.', test.__logger.results[0].value)
+    @assertEquals('should have failed', 'F', test.__logger.results[1].value)
+    @assertEquals('should have errors', 'E', test.__logger.results[2].value)
 
 new TestCaseTest().run()
