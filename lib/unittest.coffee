@@ -32,7 +32,8 @@ class TestCase
           console.log("#{method}: #{e.message}")
           test_results += "F"
         else
-          console.log(e)
+          console.log("#{method}: #{e.stack}")
+          test_results += "E"
       amount += 1
 
     time = new Date() - time

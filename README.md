@@ -14,7 +14,7 @@ class FooTest extends unittest.TestCase
     test_bar: () ->
         @assertTrue("should be true", true)
 
-new FooTest.run()
+new FooTest().run()
 ```
 
 Will run all the methods that start with 'test_' and this will produce the
