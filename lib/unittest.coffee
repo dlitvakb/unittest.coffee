@@ -58,7 +58,7 @@ class DefaultLogger
 
 class TestCase
   constructor: (logger=new DefaultLogger()) ->
-    @assertions = 0
+    @__assertions = 0
     @logger = logger
 
   class_setup: () ->
@@ -74,7 +74,7 @@ class TestCase
     return
 
   _assertion: (message, condition) ->
-    @assertions += 1
+    @__assertions += 1
     throw new AssertionError(message) if not condition
 
   assertEquals: (message, expected, expectee) ->
@@ -120,7 +120,7 @@ class TestCase
 
     @class_teardown()
 
-    @logger.dump_results(new Date() - time, @assertions)
+    @logger.dump_results(new Date() - time, @__assertions)
     @assertions = 0
 
 class TestSuite
